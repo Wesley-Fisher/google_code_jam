@@ -1,5 +1,7 @@
 #include <fstream>
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 
 #ifdef TEST
 // https://google.github.io/googletest/quickstart-cmake.html
@@ -7,6 +9,28 @@
 #endif
 
 // Includes for problem here
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// Define Utilities
+#define iow(w) std::setw(w)
+#define iop(p) std::setprecision(p)
+#define iowp(w,p) iow(w) << iop(p)
+
+#ifdef LOCAL
+  #define LOG(...) std::cout << __VA_ARGS__ << std::endl
+#else
+  #define LOG(...) 
+#endif
+
+bool OpenTest(std::string& name, std::ifstream& fin)
+{
+  std::string filename = "tests/" + name + ".txt";
+  fin.open(filename);
+  return fin.is_open();
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -37,19 +61,27 @@ struct CaseSolution {
 // Main Function
 
 #ifndef NOMAIN
-int main()
+int main(int argc, char** argv)
 {
   #ifdef LOCAL
     std::cout << "Starting" << std::endl;
+
+    std::string file = "tests";
+    if(argc == 2)
+    {
+      file = std::string(argv[1]);
+    }
+
     std::ifstream fin;
-    fin.open("tests.txt");
-    if(!fin.is_open())
+    if(!OpenTest(file, fin))
     {
       std::cout << "Create a tests.txt file" << std::endl;
       return 0;
     }
+
     std::ofstream fout;
-    fout.open("results.txt");
+    fout.open("tests/" + file + "_results.txt");
+
     SolveProblem(fin, fout);
     std::cout << "Finished" << std::endl;
   #else
