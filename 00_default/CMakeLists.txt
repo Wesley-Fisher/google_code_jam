@@ -26,7 +26,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(
   tests
-  problem.cpp problem.h
+  problem.cpp
 )
 
 target_compile_definitions(tests PRIVATE TEST)
@@ -52,7 +52,7 @@ gtest_discover_tests(tests)
 
 add_executable(
   main
-  problem.cpp problem.h
+  problem.cpp
 )
 
 target_compile_definitions(main PRIVATE LOCAL)
