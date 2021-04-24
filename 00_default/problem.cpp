@@ -1,49 +1,4 @@
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-
-#ifdef TEST
-// https://google.github.io/googletest/quickstart-cmake.html
-#include <gtest/gtest.h>
-#endif
-
-// Includes for problem here
-
-
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-// Define Utilities
-#define iow(w) std::setw(w)
-#define iop(p) std::setprecision(p)
-#define iowp(w,p) iow(w) << iop(p)
-
-#ifdef LOCAL
-  #define LOG(...) std::cout << __VA_ARGS__ << std::endl
-#else
-  #define LOG(...) 
-#endif
-
-bool OpenTest(std::string& name, std::ifstream& fin)
-{
-  std::string filename = "tests/" + name + ".txt";
-  fin.open(filename);
-  return fin.is_open();
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-// Define common structures and functions
-struct CaseDetails;
-struct CaseSolution;
-
-void SolveProblem(std::istream& in, std::ostream& out);
-CaseDetails ReadCaseDetails(std::istream& in);
-CaseSolution SolveCase(CaseDetails details);
-void OutputSolution(CaseSolution solution, std::ostream& out, int case_num);
-
+#include "problem.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +30,7 @@ int main(int argc, char** argv)
     std::ifstream fin;
     if(!OpenTest(file, fin))
     {
-      std::cout << "Create a tests.txt file" << std::endl;
+      std::cout << "Create a " << file << ".txt file" << std::endl;
       return 0;
     }
 
@@ -91,6 +46,7 @@ int main(int argc, char** argv)
   return 0;
 }
 #endif
+
 
 void SolveProblem(std::istream& in, std::ostream& out) {
     int num_problems = 0;
