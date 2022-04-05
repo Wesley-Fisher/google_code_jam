@@ -27,7 +27,7 @@
 
 bool OpenTest(std::string& name, std::ifstream& fin)
 {
-  std::string filename = "../tests/" + name + ".txt";
+  std::string filename = "tests/" + name + ".txt";
   fin.open(filename);
   return fin.is_open();
 }
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
       return 0;
     }
 
-    std::string sOut = "../tests/" + file + "_results.txt";
+    std::string sOut = "tests/" + file + "_results.txt";
     std::cout << "Writing to: " << sOut << std::endl;
     std::ofstream fout;
     fout.open(sOut);

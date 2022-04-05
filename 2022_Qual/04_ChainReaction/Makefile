@@ -1,10 +1,9 @@
 SHELL:=/bin/bash
 
+CMAKE ?= cmake
+TEST ?= tests
+
 build:
-ifndef CMAKE
-	echo "Specify CMake"
-	exit()
-endif
 	make clean
 	mkdir -p build
 	cd build && ${CMAKE} ..
@@ -21,9 +20,6 @@ unit:
 	./bin/tests
 
 test:
-ifndef TEST
-	TEST=tests
-endif
 	./bin/main ${TEST}
 
 .PHONY: build
