@@ -19,6 +19,6 @@ unit:
 	./bin/tests
 
 test:
-	cd tests && python interactive_runner.py python3 local_testing_tool.py3 0 -- ../bin/main
+	echo "Enter testing script here"
 
 .PHONY: build

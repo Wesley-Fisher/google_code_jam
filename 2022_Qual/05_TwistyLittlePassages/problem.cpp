@@ -11,6 +11,12 @@
 #include <string>
 #include <sstream>
 
+#ifdef LOCAL
+  #define LOG(...) std::cerr << __VA_ARGS__ << std::endl
+#else
+  #define LOG(...) 
+#endif
+
 int main()
 {
   int T;
@@ -18,29 +24,33 @@ int main()
 
   for(int t=0; t<T; t++)
   {
-      int N;
-      int K;
+      unsigned long int N;
+      unsigned long int K;
       std::cin >> N;
       std::cin >> K;
 
-      std::vector<int> passagesFrom;
+      LOG("Problem #: " << t << " N=" << N << ", K=" << K);
+
+      std::vector<unsigned long int> passagesFrom;
       std::vector<bool> visited;
       passagesFrom.resize(N+1, 0);
       visited.resize(N+1, false);
 
       bool bExit = false;
       int lim = std::min(K, N);
-      for(int i=0; i<lim; i++)
+      for(int i=0; i<K; i++)
       {
-        int room;
-        int passages;
+        unsigned long int room = 0;
+        unsigned long int passages = 0;
         std::cin >> room;
         std::cin >> passages;
+
+        //LOG("  room=" << room << " with passages " << passages);
 
         visited[room] = true;
         passagesFrom[room] = passages;
 
-        int dest = room;
+        unsigned long int dest = room;
         while(visited[dest])
         {
           dest = (dest + 1) % (N + 1);
@@ -60,14 +70,19 @@ int main()
         {
           break;
         }
-        std::cout << "T " << dest << std::endl << std::flush;
+
+        if(i < K-1)
+        {
+          //LOG("  go to " << dest);
+          std::cout << "T " << dest << std::endl << std::flush;
+        }
       }
 
-      int totalPassages = 0;
-      int visitedRooms = 0;
-      int unvisitedRooms = 0;
+      unsigned long int totalPassages = 0;
+      unsigned long int visitedRooms = 0;
+      unsigned long int unvisitedRooms = 0;
 
-      for(int i=1; i<=N; i++)
+      for(unsigned long int i=1; i<=N; i++)
       {
         if (visited[i])
         {
@@ -81,9 +96,10 @@ int main()
       }
 
       float avgPassages = (float)totalPassages / visitedRooms;
-      int guess = totalPassages + avgPassages * unvisitedRooms;
+      unsigned long int guess = totalPassages + avgPassages * unvisitedRooms;
       guess /= 2;
 
+      //LOG("  estimate " << guess);
       std::cout << "E " << guess << std::endl << std::flush;
   }
 
