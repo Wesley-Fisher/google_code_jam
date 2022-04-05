@@ -49,9 +49,14 @@ void OutputSolution(CaseSolution solution, std::ostream& out, int case_num);
 ////////////////////////////////////////////////////////////////////////////////
 // Problem-Specific Structs
 struct CaseDetails {
+  int N;
+  int dice[1000000] = {0};
+  int Nmin;
+  int Nmax;
 };
 
 struct CaseSolution {
+  int run;
 };
 
 
@@ -112,16 +117,63 @@ void SolveProblem(std::istream& in, std::ostream& out) {
 
 CaseDetails ReadCaseDetails(std::istream& in) {
     CaseDetails p;
+    p.Nmin = -1;
+    p.Nmax = -1;
+
+    in >> p.N;
+    for(int i=0; i<p.N; i++)
+    {
+      int d;
+      in >> d;
+      p.dice[d-1] ++;
+
+      if(p.Nmin == -1 || d < p.Nmin)
+      {
+        p.Nmin = d;
+      }
+      if(p.Nmax == -1 || d > p.Nmax)
+      {
+        p.Nmax = d;
+      }
+    }
 
     return p;
 }
 
 void OutputSolution(CaseSolution solution, std::ostream& out, int case_num) {
-    //out << "Case #" << case_num << ": " << std::endl;
+    out << "Case #" << case_num << ": " << solution.run << std::endl;
 }
 
 CaseSolution SolveCase(CaseDetails details) {
     CaseSolution solution;
+
+    int run = 0;
+    int lookFor = 1;
+    int numLeft = details.N;
+
+    int i = details.Nmin;
+
+    while(true)
+    {
+      // If there are dice to pick from
+      if(details.dice[i-1])
+      {
+        while (i >= lookFor && details.dice[i-1])
+        {
+          run++;
+          lookFor++;
+          details.dice[i-1]--;
+          numLeft--;
+        }
+      }
+
+      i = i + 1;
+      if(i > details.Nmax)
+      {
+        solution.run = run;
+        return solution;
+      }
+    }
 
     return solution;
 }

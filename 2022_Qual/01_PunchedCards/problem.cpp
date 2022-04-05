@@ -49,9 +49,12 @@ void OutputSolution(CaseSolution solution, std::ostream& out, int case_num);
 ////////////////////////////////////////////////////////////////////////////////
 // Problem-Specific Structs
 struct CaseDetails {
+  int R;
+  int C;
 };
 
 struct CaseSolution {
+  std::vector<std::string> vsLines;
 };
 
 
@@ -113,17 +116,85 @@ void SolveProblem(std::istream& in, std::ostream& out) {
 CaseDetails ReadCaseDetails(std::istream& in) {
     CaseDetails p;
 
+    in >> p.R;
+    in >> p.C;
+
     return p;
 }
 
 void OutputSolution(CaseSolution solution, std::ostream& out, int case_num) {
-    //out << "Case #" << case_num << ": " << std::endl;
+    out << "Case #" << case_num << ": " << std::endl;
+
+    for(int i=0; i < solution.vsLines.size(); i++)
+    {
+      out << solution.vsLines[i];
+    }
+}
+
+std::string CreateRow(int r, int C)
+{
+  std::string sRow;
+  bool bDividerRow = (r % 2 == 0);
+  
+  int c0 = 0;
+  if (r < 2)
+  {
+    c0 = 1;
+    sRow += "..";
+  }
+
+  for(int c=c0; c<C; c++)
+  {
+    if(bDividerRow)
+    {
+      sRow += "+-";
+    }
+    else
+    {
+      sRow += "|.";
+    }
+  }
+
+    if(bDividerRow)
+    {
+      sRow += "+\n";
+    }
+    else
+    {
+      sRow += "|\n";
+    }
+
+    return sRow;
 }
 
 CaseSolution SolveCase(CaseDetails details) {
     CaseSolution solution;
 
+    for(int r = 0; r < 2*details.R+1; r++)
+    {
+      std::string sLine = CreateRow(r, details.C);
+      solution.vsLines.push_back(sLine);
+    }
+
     return solution;
+}
+
+int countPeriods(CaseSolution solution)
+{
+  int iPeriods = 0;
+
+  for(int i=0; i<solution.vsLines.size(); i++)
+  {
+    for(int j=0; j<solution.vsLines[i].size(); j++)
+    {
+      char c = solution.vsLines[i][j];
+      if (c == '.')
+      {
+        iPeriods++;
+      }
+    }
+  }
+  return iPeriods;
 }
 
 
@@ -135,5 +206,74 @@ CaseSolution SolveCase(CaseDetails details) {
 TEST(GTestTest, BasicAssertions) {
   EXPECT_STRNE("hello", "world");
   EXPECT_EQ(7 * 6, 42);
+}
+
+TEST(GTestTest, NumRows) {
+  CaseDetails details;
+  CaseSolution solution;
+
+  details.R = 3;
+  details.C = 4;
+  solution = SolveCase(details);
+  EXPECT_EQ(solution.vsLines.size(), 7);
+
+  details.R = 2;
+  details.C = 2;
+  solution = SolveCase(details);
+  EXPECT_EQ(solution.vsLines.size(), 5);
+
+  details.R = 2;
+  details.C = 3;
+  solution = SolveCase(details);
+  EXPECT_EQ(solution.vsLines.size(), 5);
+}
+
+TEST(GTestTest, NumCols) {
+  CaseDetails details;
+  CaseSolution solution;
+
+  details.R = 3;
+  details.C = 4;
+  solution = SolveCase(details);
+  EXPECT_EQ(solution.vsLines[0].size(), 9+1);
+  EXPECT_EQ(solution.vsLines[1].size(), 9+1);
+  EXPECT_EQ(solution.vsLines[2].size(), 9+1);
+  EXPECT_EQ(solution.vsLines[3].size(), 9+1);
+
+  details.R = 2;
+  details.C = 2;
+  solution = SolveCase(details);
+  EXPECT_EQ(solution.vsLines[0].size(), 5+1);
+  EXPECT_EQ(solution.vsLines[1].size(), 5+1);
+  EXPECT_EQ(solution.vsLines[2].size(), 5+1);
+  EXPECT_EQ(solution.vsLines[3].size(), 5+1);
+
+  details.R = 2;
+  details.C = 3;
+  solution = SolveCase(details);
+  EXPECT_EQ(solution.vsLines[0].size(), 7+1);
+  EXPECT_EQ(solution.vsLines[1].size(), 7+1);
+  EXPECT_EQ(solution.vsLines[2].size(), 7+1);
+  EXPECT_EQ(solution.vsLines[3].size(), 7+1);
+}
+
+TEST(GTestTest, NumPeriods) {
+  CaseDetails details;
+  CaseSolution solution;
+
+  details.R = 3;
+  details.C = 4;
+  solution = SolveCase(details);
+  EXPECT_EQ(countPeriods(solution), details.R*details.C+3);
+
+  details.R = 2;
+  details.C = 2;
+  solution = SolveCase(details);
+  EXPECT_EQ(countPeriods(solution), details.R*details.C+3);
+
+  details.R = 2;
+  details.C = 3;
+  solution = SolveCase(details);
+  EXPECT_EQ(countPeriods(solution), details.R*details.C+3);
 }
 #endif
