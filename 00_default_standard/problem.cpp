@@ -42,7 +42,7 @@ struct CaseSolution;
 
 void SolveProblem(std::istream& in, std::ostream& out);
 CaseDetails ReadCaseDetails(std::istream& in);
-CaseSolution SolveCase(CaseDetails details);
+CaseSolution SolveCase(CaseDetails details, std::string sCase);
 void OutputSolution(CaseSolution solution, std::ostream& out, int case_num);
 
 
@@ -101,7 +101,7 @@ void SolveProblem(std::istream& in, std::ostream& out) {
 
     for(int i=0; i<num_problems; i++) {
         CaseDetails case_details = ReadCaseDetails(in);
-        CaseSolution solution = SolveCase(case_details);
+        CaseSolution solution = SolveCase(case_details, std::to_string(i));
         OutputSolution(solution, out, i+1);
     }
 }
@@ -121,7 +121,8 @@ void OutputSolution(CaseSolution solution, std::ostream& out, int case_num) {
     //out << "Case #" << case_num << ": " << std::endl;
 }
 
-CaseSolution SolveCase(CaseDetails details) {
+CaseSolution SolveCase(CaseDetails details, std::string sCase) {
+    LOG("SolveCase: " << sCase);
     CaseSolution solution;
 
     return solution;
@@ -136,5 +137,10 @@ CaseSolution SolveCase(CaseDetails details) {
 TEST(GTestTest, BasicAssertions) {
   EXPECT_STRNE("hello", "world");
   EXPECT_EQ(7 * 6, 42);
+}
+
+TEST(GTestTest, SolveCaseDummy) {
+  CaseDetails det;
+  CaseSolution sol = SolveCase(det, "dummy");
 }
 #endif
