@@ -28,7 +28,7 @@
 
 bool OpenTest(std::string& name, std::ifstream& fin)
 {
-  std::string filename = "../tests/" + name + ".txt";
+  std::string filename = name + ".txt";
   fin.open(filename);
   return fin.is_open();
 }
@@ -41,8 +41,10 @@ struct CaseDetails;
 struct CaseSolution;
 
 void SolveProblem(std::istream& in, std::ostream& out);
+void AnalyzeProblem(std::istream& in, std::istream& answers);
 CaseDetails ReadCaseDetails(std::istream& in);
-CaseSolution SolveCase(CaseDetails details);
+CaseSolution SolveCase(CaseDetails details, std::string sCase);
+std::string CaseOutput(CaseSolution solution, int case_num);
 void OutputSolution(CaseSolution solution, std::ostream& out, int case_num);
 
 
@@ -66,7 +68,29 @@ struct CaseSolution {
 #ifndef NOMAIN
 int main(int argc, char** argv)
 {
-  #ifdef LOCAL
+  #ifdef ANALYSIS
+    if(argc != 3)
+    {
+      std::cout << "Call with [exe, input, output] as arguments" << std::endl;
+      return 0;
+    }
+    std::ifstream fin;
+    std::string inName = std::string(argv[1]);
+    if(!OpenTest(inName, fin))
+    {
+      std::cout << "Create input file" << std::endl;
+      return 0;
+    }
+    std::ifstream answers;
+    std::string ansName = std::string(argv[2]);
+    if(!OpenTest(ansName, answers))
+    {
+      std::cout << "Create answers file" << std::endl;
+      return 0;
+    }
+
+    AnalyzeProblem(fin, answers);
+  #elif defined LOCAL
     std::cout << "Starting" << std::endl;
 
     std::string file = "tests";
@@ -82,7 +106,7 @@ int main(int argc, char** argv)
       return 0;
     }
 
-    std::string sOut = "../tests/" + file + "_results.txt";
+    std::string sOut = file + "_results.txt";
     std::cout << "Writing to: " << sOut << std::endl;
     std::ofstream fout;
     fout.open(sOut);
@@ -104,8 +128,34 @@ void SolveProblem(std::istream& in, std::ostream& out) {
 
     for(int i=0; i<num_problems; i++) {
         CaseDetails case_details = ReadCaseDetails(in);
-        CaseSolution solution = SolveCase(case_details);
+        CaseSolution solution = SolveCase(case_details, std::to_string(i));
         OutputSolution(solution, out, i+1);
+    }
+}
+
+void AnalyzeProblem(std::istream& in, std::istream& answers) {
+    int num_problems = 0;
+    in >> num_problems;
+
+    LOG("ANALYZING " << num_problems << " problems");
+
+    for(int i=0; i<num_problems; i++) {
+        CaseDetails case_details = ReadCaseDetails(in);
+        CaseSolution solution = SolveCase(case_details, std::to_string(i+1));
+        
+        std::string ans = CaseOutput(solution, i+1);
+        ans.pop_back(); // Remove newline for logging.comparing
+        
+        std::string key;
+        std::getline(answers, key);
+        
+        if(ans.compare(key)!= 0)
+        {
+          LOG("MISMATCH (mine, key)");
+          LOG(ans);
+          LOG(key);
+          LOG("");
+        }
     }
 }
 
@@ -126,8 +176,15 @@ CaseDetails ReadCaseDetails(std::istream& in) {
     return p;
 }
 
+std::string CaseOutput(CaseSolution solution, int case_num)
+{
+  std::stringstream ss;
+  ss << "Case #" << case_num << ": " << solution.y << std::endl;
+  return std::string(ss.str());
+}
+
 void OutputSolution(CaseSolution solution, std::ostream& out, int case_num) {
-    out << "Case #" << case_num << ": " << solution.y << std::endl;
+    out << CaseOutput(solution, case_num);
 }
 
 
@@ -350,7 +407,8 @@ std::deque<std::string> mergeBookends(std::deque<std::string> towers)
 }
 
 
-CaseSolution SolveCase(CaseDetails details) {
+CaseSolution SolveCase(CaseDetails details, std::string sCase) {
+    LOG("SolveCase: " << sCase);
     CaseSolution solution;
     solution.y = "IMPOSSIBLE";
 
@@ -396,6 +454,12 @@ CaseSolution SolveCase(CaseDetails details) {
     return solution;
 }
 
+// Dummy so I don't need to modify everything here
+CaseSolution SolveCase(CaseDetails details)
+{
+  return SolveCase(details, "dummyX");
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -405,6 +469,12 @@ CaseSolution SolveCase(CaseDetails details) {
 TEST(GTestTest, BasicAssertions) {
   EXPECT_STRNE("hello", "world");
   EXPECT_EQ(7 * 6, 42);
+}
+
+TEST(GTestTest, SolveCaseDummy) {
+  CaseDetails det;
+  det.N = 0;
+  CaseSolution sol = SolveCase(det, "dummy");
 }
 
 TEST(GTestTest, Example1) {
