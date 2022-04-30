@@ -340,6 +340,7 @@ std::deque<std::string> mergeSolid(std::deque<std::string> towers)
   {
     if (towers[i].size() > 0)
     {
+      LOG("  " << i << "=" << towers[i]);
       out.push_back(towers[i]);
     }
   }
@@ -379,10 +380,13 @@ std::deque<std::string> mergeBookends(std::deque<std::string> towers)
         continue;
       }
 
+      LOG("Compare bookends: " << towers[i] << ", " << towers[j]);
+
       if(towers[j][towers[j].size()-1] == c0)
       {
         towers[j] = towers[j] + s;
         towers[i] = "";
+        LOG("Match1");
         break;
       }
 
@@ -390,6 +394,9 @@ std::deque<std::string> mergeBookends(std::deque<std::string> towers)
       {
         towers[j] = s + towers[j];
         towers[i] = "";
+        LOG("Match2");
+        LOG(towers[i].size());
+        LOG(towers[j]);
         break;
       }
     }
@@ -399,6 +406,7 @@ std::deque<std::string> mergeBookends(std::deque<std::string> towers)
   {
     if (towers[i].size() > 0)
     {
+      LOG("  " << i << "=" << towers[i]);
       out.push_back(towers[i]);
     }
   }
@@ -416,22 +424,26 @@ CaseSolution SolveCase(CaseDetails details, std::string sCase) {
     {
       if(!isValid(details.towers[i]))
       {
+        LOG("Found invalid at start [" << i << "]=" << details.towers[i]);
         return solution;
       }
     }
 
     std::deque<std::string> towers = mergeSolid(details.towers);
+    LOG("After solids merged: " << towers.size());
     int iStart = towers.size();
     int iEnd = iStart + 1;
     while(iEnd != iStart)
     {
       iStart = towers.size();
-      towers = mergeBookends(details.towers);
+      towers = mergeBookends(towers);
+      LOG("After bookends merged: " << towers.size());
 
       for(int i=0; i<towers.size(); i++)
       {
         if(!isValid(towers[i]))
         {
+          LOG("Found invalid [" << i << "]=" << towers[i]);
           return solution;
         }
       }
@@ -444,6 +456,7 @@ CaseSolution SolveCase(CaseDetails details, std::string sCase) {
     {
       sol = sol + towers[i];
     }
+    LOG("  Final=" << sol);
 
     if(isValid(sol))
     {
@@ -710,6 +723,34 @@ TEST(GTestTest, ExampleMine8) {
 
   CaseSolution sol = SolveCase(det);
   EXPECT_EQ(sol.y, "ABCCDD");
+}
+
+TEST(GTestTest, AnalysisPS1_16) {
+  CaseDetails det;
+  det.N = 6;
+  det.towers = {"BBHH", "W", "HKKK", "OOO", "H", "MMMMM"};
+
+  CaseSolution sol = SolveCase(det, "AnalysisPS1_16");
+  EXPECT_EQ(sol.y, "WBBHHHHKKKOOOMMMMM");
+}
+
+TEST(GTestTest, AnalysisPS1_16_MergeSteps) {
+  std::deque<std::string> towers = {"BBHH", "W", "HKKK", "OOO", "H", "MMMMM"};
+  std::deque<std::string> out1 = mergeSolid(towers);
+
+  EXPECT_EQ(out1.size(), 5);
+  EXPECT_EQ(out1[0], "BBHHH");
+  EXPECT_EQ(out1[1], "W");
+  EXPECT_EQ(out1[2], "HKKK");
+  EXPECT_EQ(out1[3], "OOO");
+  EXPECT_EQ(out1[4], "MMMMM");
+
+  std::deque<std::string> out2 = mergeBookends(out1);
+  EXPECT_EQ(out2.size(), 4);
+  EXPECT_EQ(out2[0], "W");
+  EXPECT_EQ(out2[1], "BBHHHHKKK");
+  EXPECT_EQ(out2[2], "OOO");
+  EXPECT_EQ(out2[3], "MMMMM");
 }
 
 #endif
