@@ -100,10 +100,27 @@ add_executable(
   problem.cpp
 )
 
-target_compile_definitions(analysis PRIVATE LOCAL)
 target_compile_definitions(analysis PRIVATE ANALYSIS)
 
 set_target_properties( analysis
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
+)
+
+
+
+##################
+## Create Verbose Analysis Runnable
+
+add_executable(
+  analysis_verbose
+  problem.cpp
+)
+
+target_compile_definitions(analysis_verbose PRIVATE LOCAL)
+target_compile_definitions(analysis_verbose PRIVATE ANALYSIS)
+
+set_target_properties( analysis_verbose
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
 )

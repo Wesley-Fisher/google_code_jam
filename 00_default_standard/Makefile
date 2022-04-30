@@ -30,5 +30,10 @@ analyze:
 	cd analysis/test_set_1 && ../../bin/analysis ts1_input ts1_output
 	cd analysis/test_set_2 && ../../bin/analysis ts2_input ts2_output
 
+analyzeV:
+	cd analysis/sample_test_set_1 && ../../bin/analysis_verbose sample_ts1_input sample_ts1_output
+	cd analysis/test_set_1 && ../../bin/analysis_verbose ts1_input ts1_output
+	cd analysis/test_set_2 && ../../bin/analysis_verbose ts2_input ts2_output
+
 
 .PHONY: build
