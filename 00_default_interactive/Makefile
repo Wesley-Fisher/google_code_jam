@@ -18,6 +18,9 @@ clean:
 unit:
 	./bin/tests
 
+unitV:
+	./bin/tests_verbose
+
 test:
 	echo "Enter testing script here"
 

@@ -19,6 +19,9 @@ clean:
 unit:
 	./bin/tests
 
+unitV:
+	./bin/tests_verbose
+
 test:
 	./bin/main ${TEST}
 
