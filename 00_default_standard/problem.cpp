@@ -28,7 +28,7 @@
 
 bool OpenTest(std::string& name, std::ifstream& fin)
 {
-  std::string filename = "../tests/" + name + ".txt";
+  std::string filename = name + ".txt";
   fin.open(filename);
   return fin.is_open();
 }
@@ -101,7 +101,7 @@ void SolveProblem(std::istream& in, std::ostream& out) {
 
     for(int i=0; i<num_problems; i++) {
         CaseDetails case_details = ReadCaseDetails(in);
-        CaseSolution solution = SolveCase(case_details, std::to_string(i));
+        CaseSolution solution = SolveCase(case_details, std::to_string(i+1));
         OutputSolution(solution, out, i+1);
     }
 }

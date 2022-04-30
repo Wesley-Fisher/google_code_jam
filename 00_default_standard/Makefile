@@ -23,6 +23,6 @@ unitV:
 	./bin/tests_verbose
 
 test:
-	./bin/main ${TEST}
+	cd tests ** ../bin/main ${TEST}
 
 .PHONY: build
