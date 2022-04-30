@@ -138,7 +138,7 @@ void AnalyzeProblem(std::istream& in, std::istream& answers) {
     int num_problems = 0;
     in >> num_problems;
 
-    LOG("ANALYZING " << num_problems << " problems");
+    std::cout << "ANALYZING " << num_problems << " problems" << std::endl;
 
     for(int i=0; i<num_problems; i++) {
         CaseDetails case_details = ReadCaseDetails(in);
@@ -150,12 +150,12 @@ void AnalyzeProblem(std::istream& in, std::istream& answers) {
         std::string key;
         std::getline(answers, key);
         
-        if(OutputCompare(ans, key))
+        if(!OutputCompare(ans, key))
         {
-          LOG("MISMATCH (mine, key)");
-          LOG(ans);
-          LOG(key);
-          LOG("");
+          std::cout << "MISMATCH (mine, key)" << std::endl;
+          std::cout << ans << std::endl;
+          std::cout << key << std::endl;
+          std::cout << "" << std::endl;
         }
     }
 }
@@ -476,7 +476,48 @@ CaseSolution SolveCase(CaseDetails details)
 
 bool OutputCompare(std::string mine, std::string ans)
 {
-  return false;
+  int i = 0;
+  while (mine[i] != ':')
+    i++;
+  i++;
+  i++;
+
+  // Should start the same
+  mine = mine.substr(i);
+  ans = ans.substr(i);
+
+  if (mine.compare(ans) == 0)
+  {
+    return true;
+  }
+
+  if( (mine.compare("IMPOSSIBLE") !=0) !=
+      (ans.compare("IMPOSSIBLE") != 0) )
+  {
+    return false;
+  }
+
+  if(mine.size() != ans.size())
+  {
+    return false;
+  }
+
+  int letters[26] = {0};
+  for(int i=0; i<mine.size(); i++)
+  {
+    letters[mine[i]-'A']--;
+    letters[ans[i]-'A']++;
+  }
+
+  for(int i=0; i<26; i++)
+  {
+    if (letters[i] != 0)
+    {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
