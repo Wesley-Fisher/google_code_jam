@@ -41,8 +41,10 @@ struct CaseDetails;
 struct CaseSolution;
 
 void SolveProblem(std::istream& in, std::ostream& out);
+void AnalyzeProblem(std::istream& in, std::istream& answers);
 CaseDetails ReadCaseDetails(std::istream& in);
 CaseSolution SolveCase(CaseDetails details, std::string sCase);
+std::string CaseOutput(CaseSolution solution, int case_num);
 void OutputSolution(CaseSolution solution, std::ostream& out, int case_num);
 
 
@@ -63,7 +65,29 @@ struct CaseSolution {
 #ifndef NOMAIN
 int main(int argc, char** argv)
 {
-  #ifdef LOCAL
+  #ifdef ANALYSIS
+    if(argc != 3)
+    {
+      std::cout << "Call with [exe, input, output] as arguments" << std::endl;
+      return 0;
+    }
+    std::ifstream fin;
+    std::string inName = std::string(argv[1]);
+    if(!OpenTest(inName, fin))
+    {
+      std::cout << "Create input file" << std::endl;
+      return 0;
+    }
+    std::ifstream answers;
+    std::string ansName = std::string(argv[2]);
+    if(!OpenTest(ansName, answers))
+    {
+      std::cout << "Create answers file" << std::endl;
+      return 0;
+    }
+
+    AnalyzeProblem(fin, answers);
+  #elif defined LOCAL
     std::cout << "Starting" << std::endl;
 
     std::string file = "tests";
@@ -106,19 +130,46 @@ void SolveProblem(std::istream& in, std::ostream& out) {
     }
 }
 
+void AnalyzeProblem(std::istream& in, std::istream& answers) {
+    int num_problems = 0;
+    in >> num_problems;
+
+    LOG("ANALYZING " << num_problems << " problems");
+
+    for(int i=0; i<num_problems; i++) {
+        CaseDetails case_details = ReadCaseDetails(in);
+        CaseSolution solution = SolveCase(case_details, std::to_string(i+1));
+        
+        std::string ans = CaseOutput(solution, i+1);
+        ans.pop_back(); // Remove newline for logging.comparing
+        
+        std::string key;
+        std::getline(answers, key);
+        
+        if(ans.compare(key)!= 0)
+        {
+          LOG("MISMATCH (mine, key)");
+          LOG(ans);
+          LOG(key);
+          LOG("");
+        }
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 // Problem-Specifics
 
-CaseDetails ReadCaseDetails(std::istream& in) {
-    CaseDetails p;
-
-    return p;
+std::string CaseOutput(CaseSolution solution, int case_num)
+{
+  std::stringstream ss;
+  //ss << "Case #" << case_num << ": " << std::endl;
+  return std::string(ss.str());
 }
 
 void OutputSolution(CaseSolution solution, std::ostream& out, int case_num) {
-    //out << "Case #" << case_num << ": " << std::endl;
+    out << CaseOutput(solution, case_num);
 }
 
 CaseSolution SolveCase(CaseDetails details, std::string sCase) {

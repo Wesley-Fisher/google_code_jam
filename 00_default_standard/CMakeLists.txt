@@ -89,3 +89,21 @@ set_target_properties( main
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
 )
+
+
+
+##################
+## Create Analysis Runnable
+
+add_executable(
+  analysis
+  problem.cpp
+)
+
+target_compile_definitions(analysis PRIVATE LOCAL)
+target_compile_definitions(analysis PRIVATE ANALYSIS)
+
+set_target_properties( analysis
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
+)
