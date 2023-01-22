@@ -222,19 +222,50 @@ void AddCoverage(unsigned long& p0, unsigned long pMin, unsigned long pMax, unsi
   }
 }
 
+void AddCoverage3Reverse(unsigned long& pLast, unsigned long pMin, unsigned long pMax, unsigned long& pressed)
+{
+  unsigned long d1 = absDiff(pLast, pMin);
+  unsigned long d2 = absDiff(pLast, pMax);
+
+  if (d1 < d2)
+  {
+    pressed = pressed + (pMax - pMin) + d1;
+    pLast = pMax;
+  }
+  else
+  {
+    pressed = pressed + (pMax - pMin) + d2;
+    pLast = pMin;
+  }
+}
+
+void AddCoverage4(unsigned long& lastUp, unsigned long& lastDown, unsigned long pMin, unsigned long pMax, unsigned long& pressUp, unsigned long& pressDown)
+{
+  unsigned long newUp = pMax - pMin + std::min(absDiff(lastUp, pMin)+pressUp, absDiff(lastDown, pMin)+ pressDown);
+  unsigned long newDown = pMax - pMin + std::min(absDiff(lastUp, pMax)+pressUp, absDiff(lastDown, pMax)+ pressDown);
+
+  pressUp = newUp;
+  pressDown = newDown;
+  lastUp = pMax;
+  lastDown = pMin;
+}
+
 CaseSolution SolveCase(CaseDetails details) {
     CaseSolution solution;
     solution.y = 0;
 
-    unsigned long p0 = 0;
-    unsigned long presses = 0;
-    for(int i=0; i<details.N-1; i++)
-    {
-      AddCoverage2(p0, details.Mins[i], details.Maxs[i], details.Mins[i+1], details.Maxs[i+1], presses);
-    }
-    AddCoverage(p0, details.Mins[details.N-1], details.Maxs[details.N-1], presses);
+    int iLast = details.Mins.size()-1;
+    unsigned long lastUp = 0;
+    unsigned long pressesUp = 0;
+    unsigned long lastDown = 0;
+    unsigned long pressesDown = 0;
 
-    solution.y = presses;
+    for(int i=0; i<details.Mins.size(); i++)
+    {
+      AddCoverage4(lastUp, lastDown, details.Mins[i], details.Maxs[i], pressesUp, pressesDown);
+    }
+
+    solution.y = std::min(pressesUp, pressesDown);
 
     return solution;
 }
@@ -424,5 +455,29 @@ TEST(GTestTest, ExampleMine6) {
   CaseSolution sol = SolveCase(det);
 
   EXPECT_EQ(sol.y, 78);
+}
+
+TEST(GTestTest, AddCoverage3Reverse1)
+{
+  unsigned long pressed = 0;
+  unsigned long pMin = 10;
+  unsigned long pMax = 15;
+  unsigned long pLast = 9;
+
+  AddCoverage3Reverse(pLast, pMin, pMax, pressed);
+  EXPECT_EQ(pressed, 6);
+  EXPECT_EQ(pLast, 15);
+}
+
+TEST(GTestTest, AddCoverage3Reverse2)
+{
+  unsigned long pressed = 0;
+  unsigned long pMin = 10;
+  unsigned long pMax = 15;
+  unsigned long pLast = 20;
+
+  AddCoverage3Reverse(pLast, pMin, pMax, pressed);
+  EXPECT_EQ(pressed, 10);
+  EXPECT_EQ(pLast, 10);
 }
 #endif
