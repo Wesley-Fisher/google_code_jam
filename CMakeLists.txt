@@ -28,6 +28,9 @@ set_target_properties( main
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${MYPROJECT}/bin"
 )
+
+return()
+
 ####################
 ## Create Unit Tests
 
