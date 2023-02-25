@@ -1,3 +1,9 @@
+SET(MY_PROJECT "" STRING FORCE)
+
+if("${MYPROJECT}" STREQUAL "")
+  message( FATAL_ERROR "MYPROJECT not set" )
+endif()
+
 ####################
 ## Create Unit Tests
 

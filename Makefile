@@ -8,7 +8,8 @@ make_project_standard: CHECK_PROJECT
 	cp -ar 00_default_standard/* ${PROJECT}/
 
 do_setup: CHECK_PROJECT
-	cd ${PROJECT}/build && ${CMAKE} ..
+	make do_clean PROJECT=${PROJECT}
+	cd ${PROJECT}/build && ${CMAKE} ../../.. -DMYPROJECT=${PROJECT}
 
 do_compile: CHECK_PROJECT
 	cd ${PROJECT}/build && make
