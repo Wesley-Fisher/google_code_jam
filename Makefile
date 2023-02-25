@@ -7,6 +7,9 @@ make_project_standard: CHECK_PROJECT
 	mkdir ${PROJECT}
 	cp -ar 00_default_standard/* ${PROJECT}/
 
+do_clean: CHECK_PROJECT
+	rm -rf  ${PROJECT}/build/CMakeCache.txt
+
 do_setup: CHECK_PROJECT
 	make do_clean PROJECT=${PROJECT}
 	cd ${PROJECT}/build && ${CMAKE} ../../.. -DMYPROJECT=${PROJECT}
