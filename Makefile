@@ -40,6 +40,11 @@ run_analyzeV: CHECK_PROJECT
 	cd ${PROJECT}/analysis && ../bin/analysis_verbose ts1_input ts1_output
 	cd ${PROJECT}/analysis && ../bin/analysis_verbose ts2_input ts2_output
 
+make_submission: CHECK_PROJECT
+	cp ${PROJECT}/problem.cpp ${PROJECT}/submission/problem.cpp
+	sed -n '/#include \"main_standard.h\"/!{p;d;}; r src/main_standard.h' ${PROJECT}/submission/problem.cpp > ${PROJECT}/submission/problem_out.cpp
+	rm ${PROJECT}/submission/problem.cpp
+
 
 .PHONY: build CHECK_PROJECT
 
