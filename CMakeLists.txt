@@ -27,35 +27,38 @@ set_target_properties( main
     RUNTIME_OUTPUT_DIRECTORY "../bin"
 )
 
-return()
 
-####################
+####################################
 ## Create Unit Tests
+####################################
 
-add_executable(
-  tests
-
-  problem.cpp
-  ../../src/main_standard.h
+add_executable( tests
+  ${MYPROJECT}/problem.cpp
 )
 
-target_compile_definitions(tests PRIVATE TEST)
-target_compile_definitions(tests PRIVATE NOMAIN)
+include_directories( tests
+  src
+  ${Boost_INCLUDE_DIR}
+)
 
-target_link_libraries(
-  tests
-  gtest_main
+target_compile_definitions( tests
+  PRIVATE TEST
+)
+
+target_compile_definitions( tests
+  PRIVATE NOMAIN
+)
+
+target_link_libraries( tests
+  ${Boost_LIBRARIES}
 )
 
 set_target_properties( tests
     PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
+    RUNTIME_OUTPUT_DIRECTORY "../bin"
 )
 
-include(GoogleTest)
-gtest_discover_tests(tests)
-
-
+return()
 
 ####################
 ## Create Verbose Unit Tests

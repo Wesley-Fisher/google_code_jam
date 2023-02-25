@@ -22,10 +22,10 @@ do_compile: CHECK_PROJECT
 	cd ${PROJECT}/build && make
 
 run_unit: CHECK_PROJECT
-	.${PROJECT}/bin/tests
+	./${PROJECT}/bin/tests
 
 run_unitV: CHECK_PROJECT
-	.${PROJECT}/bin/tests_verbose
+	./${PROJECT}/bin/tests_verbose
 
 run_test: CHECK_PROJECT
 	cd ${PROJECT}/tests && ../bin/main ${TEST}
