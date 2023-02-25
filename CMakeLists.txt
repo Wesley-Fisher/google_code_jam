@@ -11,14 +11,11 @@ project(CODE_JAM)
 ## Create Runnable
 ####################################
 
-add_executable(
-  main
+add_executable( main
   ${MYPROJECT}/problem.cpp
 )
 
-include_directories(
-  main
-
+include_directories( main
   src
 )
 
