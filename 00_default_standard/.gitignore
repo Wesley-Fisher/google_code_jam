@@ -1,4 +1,0 @@
-/bin/
-/build/
-*.txt
-!CMakeLists.txt
