@@ -26,7 +26,7 @@ target_compile_definitions(main PRIVATE LOCAL)
 
 set_target_properties( main
     PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${MYPROJECT}/bin"
+    RUNTIME_OUTPUT_DIRECTORY "../bin"
 )
 
 return()
