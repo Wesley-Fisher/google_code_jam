@@ -4,6 +4,30 @@ if("${MYPROJECT}" STREQUAL "")
   message( FATAL_ERROR "MYPROJECT not set" )
 endif()
 
+project(CODE_JAM)
+
+
+####################################
+## Create Runnable
+####################################
+
+add_executable(
+  main
+  ${MYPROJECT}/problem.cpp
+)
+
+include_directories(
+  main
+
+  src
+)
+
+target_compile_definitions(main PRIVATE LOCAL)
+
+set_target_properties( main
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${MYPROJECT}/bin"
+)
 ####################
 ## Create Unit Tests
 
@@ -59,21 +83,6 @@ include(GoogleTest)
 gtest_discover_tests(tests_verbose)
 
 
-
-##################
-## Create Runnable
-
-add_executable(
-  main
-  problem.cpp
-)
-
-target_compile_definitions(main PRIVATE LOCAL)
-
-set_target_properties( main
-    PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
-)
 
 
 
