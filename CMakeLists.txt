@@ -6,6 +6,7 @@ endif()
 
 project(CODE_JAM)
 
+find_package(Boost REQUIRED)
 
 ####################################
 ## Create Runnable

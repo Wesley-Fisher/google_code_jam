@@ -1,6 +1,6 @@
 #ifdef TEST
-// https://google.github.io/googletest/quickstart-cmake.html
-#include <gtest/gtest.h>
+#define BOOST_TEST_MODULE MyTests
+#include <boost/test/included/unit_test.hpp>
 #endif
 
 #include <fstream>
@@ -85,13 +85,15 @@ void delete_impl(CaseDetails* details, CaseSolution* solution)
 // Testing
 
 #ifdef TEST
-TEST(GTestTest, BasicAssertions) {
-  EXPECT_STRNE("hello", "world");
-  EXPECT_EQ(7 * 6, 42);
+BOOST_AUTO_TEST_CASE(BasicAssertions) {
+  BOOST_CHECK_EQUAL("hello", "world");
+  BOOST_CHECK_EQUAL(7 * 6, 42);
 }
 
-TEST(GTestTest, SolveCaseDummy) {
-  CaseDetails det;
-  CaseSolution sol = SolveCase(det, "dummy");
+BOOST_AUTO_TEST_CASE(SolveCaseDummy) {
+  CaseDetails* det = new CaseDetails();
+  CaseSolution* sol = SolveCase(det, "dummy");
+  delete det;
+  delete sol;
 }
 #endif

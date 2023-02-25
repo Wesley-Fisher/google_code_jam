@@ -3,6 +3,10 @@ SHELL:=/bin/bash
 CMAKE ?= cmake
 TEST ?= tests
 
+init_dependencies:
+	sudo apt install libboost-all-dev
+	sudo apt install build-essential
+
 make_project_standard: CHECK_PROJECT
 	mkdir ${PROJECT}
 	cp -ar 00_default_standard/* ${PROJECT}/
