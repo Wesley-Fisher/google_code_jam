@@ -31,14 +31,14 @@ run_test: CHECK_PROJECT
 	cd ${PROJECT}/tests && ../bin/main ${TEST}
 
 run_analyze: CHECK_PROJECT
-	cd ${PROJECT}/analysis/sample_test_set_1 && ../../bin/analysis sample_ts1_input sample_ts1_output
-	cd ${PROJECT}/analysis/test_set_1 && ../../bin/analysis ts1_input ts1_output
-	cd ${PROJECT}/analysis/test_set_2 && ../../bin/analysis ts2_input ts2_output
+	cd ${PROJECT}/analysis && ../bin/analysis sample_ts1_input sample_ts1_output
+	cd ${PROJECT}/analysis && ../bin/analysis ts1_input ts1_output
+	cd ${PROJECT}/analysis && ../bin/analysis ts2_input ts2_output
 
 run_analyzeV: CHECK_PROJECT
-	cd ${PROJECT}/analysis/sample_test_set_1 && ../../bin/analysis_verbose sample_ts1_input sample_ts1_output
-	cd ${PROJECT}/analysis/test_set_1 && ../../bin/analysis_verbose ts1_input ts1_output
-	cd ${PROJECT}/analysis/test_set_2 && ../../bin/analysis_verbose ts2_input ts2_output
+	cd ${PROJECT}/analysis && ../bin/analysis_verbose sample_ts1_input sample_ts1_output
+	cd ${PROJECT}/analysis && ../bin/analysis_verbose ts1_input ts1_output
+	cd ${PROJECT}/analysis && ../bin/analysis_verbose ts2_input ts2_output
 
 
 .PHONY: build CHECK_PROJECT
