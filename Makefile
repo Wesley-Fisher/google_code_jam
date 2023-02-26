@@ -10,6 +10,12 @@ init_dependencies:
 make_project_standard: CHECK_PROJECT
 	mkdir ${PROJECT}
 	cp -ar 00_default_standard/* ${PROJECT}/
+	mkdir -p ${PROJECT}/analysis
+	mkdir -p ${PROJECT}/bin
+	mkdir -p ${PROJECT}/build
+	mkdir -p ${PROJECT}/scripts
+	mkdir -p ${PROJECT}/submission
+	mkdir -p ${PROJECT}/tests
 
 do_clean: CHECK_PROJECT
 	rm -rf  ${PROJECT}/build/CMakeCache.txt
